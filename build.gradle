@@ -25,6 +25,15 @@ repositories {
 
 
 dependencies {
+//	spring
 	compile('org.springframework.boot:spring-boot-starter')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.0.0.RELEASE'
+
+//	webjars
+	compile group: 'org.webjars.bower', name: 'cytoscape', version: '3.2.5'
+	compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7'
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
