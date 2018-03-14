@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Graphs application</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <script src="webjars/cytoscape/3.2.5/dist/cytoscape.js"></script>
+</head>
+
+<style>
+    #cy {
+        /*width: 80%;*/
+        height: 500px;
+        /*position: absolute;*/
+        /*top: 300px;*/
+        /*left: 200px;*/
+        border: 1px solid black;
+    }
+</style>
+
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Graphs application</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Create graph</a></li>
+            <li><a href="#">Something else</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container">
+    <form action="#" th:action="@{/}" th:object="${input}" method="post">
+        <div class="form-group">
+            <label for="input">Input:</label>
+            <textarea class="form-control" rows="5" th:field="*{text}" id="input"></textarea>
+            <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}" class="radio">
+                <label><input type="radio" th:field="*{type}" th:value="${inputType}" th:text="${inputType.name}"></label>
+            </div>
+            <p><button type="submit" class="btn btn-primary">Create</button></p>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <div id="cy"></div>
+</div>
+
+
+
+<script th:inline="javascript">
+    var vertices = /*[[${vertices}]]*/ '';
+    var cyVertices = [];
+    for (var vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
+        var vertex = vertices[vertexIndex];
+        cyVertices.push({
+            data: {
+                id: vertex,
+                label: vertex
+            }
+        });
+    }
+
+    var edges = /*[[${edges}]]*/ '';
+    var cyEdges = [];
+    for (var edgesIndex = 0; edgesIndex < edges.length; edgesIndex++) {
+        var edge = edges[edgesIndex];
+        cyEdges.push({
+            data: {
+                id: edge.name,
+                source: edge.source,
+                target: edge.target
+            }
+        });
+    }
+
+    var cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: {
+            nodes: cyVertices,
+            edges: cyEdges
+        },
+        style: [{
+            selector: 'node',
+            style: {
+                label: 'data(id)'
+            }
+        }],
+        layout: {
+            name: 'circle'
+        }
+    });
+</script>
+
+</body>
+</html>
