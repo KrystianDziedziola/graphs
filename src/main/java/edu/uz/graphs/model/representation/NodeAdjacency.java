@@ -1,4 +1,4 @@
-package edu.uz.graphs.model;
+package edu.uz.graphs.model.representation;
 
 import java.util.List;
 
