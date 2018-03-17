@@ -1,6 +1,7 @@
 package edu.uz.graphs.service;
 
 import edu.uz.graphs.model.graph.Graph;
+import edu.uz.graphs.model.input.EdgeInput;
 import edu.uz.graphs.model.input.InputType;
 import edu.uz.graphs.model.representation.NodeAdjacency;
 import edu.uz.graphs.service.factory.GraphRepresentationFactory;
@@ -55,6 +56,11 @@ public class GraphService {
                 adjacentNodeName -> graph.addEdge(nodeAdjacency.getNodeName(), adjacentNodeName));
         });
 
+        return graph;
+    }
+
+    public Graph addEdge(final Graph graph, final EdgeInput edge) {
+        graph.addEdge(edge.getSource(), edge.getTarget(), edge.getWeight());
         return graph;
     }
 }

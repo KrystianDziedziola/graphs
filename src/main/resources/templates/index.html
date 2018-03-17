@@ -9,12 +9,8 @@
 
 <style>
     #cy {
-        /*width: 80%;*/
         height: 500px;
-        /*position: absolute;*/
-        /*top: 300px;*/
-        /*left: 200px;*/
-        border: 1px solid black;
+        border: 1px solid lightslategrey;
     }
 </style>
 
@@ -34,22 +30,38 @@
 
 
 <div class="container">
-    <form action="#" th:action="@{/}" th:object="${input}" method="post">
+    <form id="create" action="create" th:action="@{/create}" th:object="${input}" method="post">
         <div class="form-group">
             <label for="input">Input:</label>
             <textarea class="form-control" rows="5" th:field="*{text}" id="input"></textarea>
-            <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}" class="radio">
-                <label><input type="radio" th:field="*{type}" th:value="${inputType}" th:text="${inputType.name}"></label>
+            <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}"
+                 class="radio">
+                <label><input type="radio" th:field="*{type}" th:value="${inputType}"
+                              th:text="${inputType.name}"></label>
             </div>
-            <p><button type="submit" class="btn btn-primary">Create</button></p>
+            <p>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </p>
+        </div>
+    </form>
+
+    <div class="border">
+        <div id="cy"></div>
+    </div>
+
+    <form id="addEdge" action="addEdge" th:action="@{/addEdge}" th:object="${edge}" method="post">
+        <div>
+            <label for="source">Source:</label>
+            <input th:field="*{source}" id="source"/>
+            <label for="target">Target:</label>
+            <input th:field="*{target}" id="target"/>
+            <label for="weight">Weight:</label>
+            <input th:field="*{weight}" id="weight"/>
+
+            <button type="submit" class="btn btn-primary">Add edge</button>
         </div>
     </form>
 </div>
-
-<div class="container">
-    <div id="cy"></div>
-</div>
-
 
 
 <script th:inline="javascript">
@@ -73,7 +85,9 @@
             data: {
                 id: edge.name,
                 source: edge.source,
-                target: edge.target
+                target: edge.target,
+                weight: edge.weight,
+                label: edge.weight
             }
         });
     }
@@ -84,12 +98,15 @@
             nodes: cyVertices,
             edges: cyEdges
         },
-        style: [{
-            selector: 'node',
-            style: {
-                label: 'data(id)'
-            }
-        }],
+        style: cytoscape.stylesheet()
+            .selector('node')
+            .css({
+                'content': 'data(id)'
+            })
+            .selector('edge')
+            .css({
+                'content': 'data(weight)'
+            }),
         layout: {
             name: 'circle'
         }
