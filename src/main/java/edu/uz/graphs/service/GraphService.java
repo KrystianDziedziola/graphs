@@ -1,8 +1,9 @@
 package edu.uz.graphs.service;
 
-import edu.uz.graphs.model.NodeAdjacency;
+import edu.uz.graphs.model.representation.NodeAdjacency;
 import edu.uz.graphs.model.graph.Graph;
 import edu.uz.graphs.model.input.InputType;
+import edu.uz.graphs.service.factory.NodeAdjacencyFactory;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,20 @@ public class GraphService {
     }
 
     private Graph createFromAdjacencyList(final String text) {
-        final List<NodeAdjacency> nodeAdjacencyList = nodeAdjacencyFactory.create(text);
+        final List<NodeAdjacency> nodeAdjacencyList = nodeAdjacencyFactory.createFromAdjacencyList(text);
+        return createGraph(nodeAdjacencyList);
+    }
+
+    private Graph createFromAdjacencyMatrix(final String text) {
+        final List<NodeAdjacency> nodeAdjacencyList = nodeAdjacencyFactory.createFromAdjacencyMatrix(text);
+        return createGraph(nodeAdjacencyList);
+    }
+
+    private Graph createFromIncidenceMatrix(String text) {
+        return new Graph();
+    }
+
+    private Graph createGraph(List<NodeAdjacency> nodeAdjacencyList) {
         final Graph graph = new Graph();
 
         nodeAdjacencyList.forEach(nodeAdjacency -> graph.addVertex(nodeAdjacency.getNodeName()));
@@ -40,13 +54,5 @@ public class GraphService {
         });
 
         return graph;
-    }
-
-    private Graph createFromAdjacencyMatrix(String text) {
-        return new Graph();
-    }
-
-    private Graph createFromIncidenceMatrix(String text) {
-        return new Graph();
     }
 }
