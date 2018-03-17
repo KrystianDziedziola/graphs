@@ -26,7 +26,8 @@ public class GraphsController {
 
     @PostMapping(value = "/")
     public String submit(@ModelAttribute final Input input, final Model model) {
-        final Graph graph = graphService.createGraph(input.getText(), input.getType());
+        final Graph graph = graphService
+            .createGraphFromNodeAdjacency(input.getText(), input.getType());
 
         model.addAttribute("vertices", graph.getVertices());
         model.addAttribute("edges", graph.getEdges());

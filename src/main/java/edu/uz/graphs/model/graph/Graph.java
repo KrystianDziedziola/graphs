@@ -8,11 +8,11 @@ public class Graph {
     private final Set<String> vertices = new HashSet<>();
     private final Set<Edge> edges = new HashSet<>();
 
-    public void addVertex(String nodeName) {
+    public void addVertex(final String nodeName) {
         vertices.add(nodeName);
     }
 
-    public void addEdge(String nodeName, String adjacentNodeName) {
+    public void addEdge(final String nodeName, final String adjacentNodeName) {
         edges.add(new Edge(nodeName, adjacentNodeName));
     }
 

@@ -1,22 +1,22 @@
 package edu.uz.graphs.service;
 
-import edu.uz.graphs.model.representation.NodeAdjacency;
 import edu.uz.graphs.model.graph.Graph;
 import edu.uz.graphs.model.input.InputType;
-import edu.uz.graphs.service.factory.NodeAdjacencyFactory;
+import edu.uz.graphs.model.representation.NodeAdjacency;
+import edu.uz.graphs.service.factory.GraphRepresentationFactory;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GraphService {
 
-    private final NodeAdjacencyFactory nodeAdjacencyFactory;
+    private final GraphRepresentationFactory graphRepresentationFactory;
 
-    public GraphService(NodeAdjacencyFactory nodeAdjacencyFactory) {
-        this.nodeAdjacencyFactory = nodeAdjacencyFactory;
+    public GraphService(final GraphRepresentationFactory graphRepresentationFactory) {
+        this.graphRepresentationFactory = graphRepresentationFactory;
     }
 
-    public Graph createGraph(String text, InputType type) {
+    public Graph createGraphFromNodeAdjacency(final String text, final InputType type) {
         switch (type) {
             case ADJACENCY_LIST:
                 return createFromAdjacencyList(text);
@@ -30,20 +30,22 @@ public class GraphService {
     }
 
     private Graph createFromAdjacencyList(final String text) {
-        final List<NodeAdjacency> nodeAdjacencyList = nodeAdjacencyFactory.createFromAdjacencyList(text);
-        return createGraph(nodeAdjacencyList);
+        final List<NodeAdjacency> nodeAdjacencyList = graphRepresentationFactory
+            .createFromAdjacencyList(text);
+        return createGraphFromNodeAdjacency(nodeAdjacencyList);
     }
 
     private Graph createFromAdjacencyMatrix(final String text) {
-        final List<NodeAdjacency> nodeAdjacencyList = nodeAdjacencyFactory.createFromAdjacencyMatrix(text);
-        return createGraph(nodeAdjacencyList);
+        final List<NodeAdjacency> nodeAdjacencyList = graphRepresentationFactory
+            .createFromAdjacencyMatrix(text);
+        return createGraphFromNodeAdjacency(nodeAdjacencyList);
     }
 
-    private Graph createFromIncidenceMatrix(String text) {
-        return new Graph();
+    private Graph createFromIncidenceMatrix(final String text) {
+        return graphRepresentationFactory.createGraphFromIncidenceMatrix(text);
     }
 
-    private Graph createGraph(List<NodeAdjacency> nodeAdjacencyList) {
+    private Graph createGraphFromNodeAdjacency(final List<NodeAdjacency> nodeAdjacencyList) {
         final Graph graph = new Graph();
 
         nodeAdjacencyList.forEach(nodeAdjacency -> graph.addVertex(nodeAdjacency.getNodeName()));

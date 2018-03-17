@@ -1,8 +1,10 @@
 package edu.uz.graphs.service.factory;
 
+import edu.uz.graphs.model.graph.Graph;
 import edu.uz.graphs.model.representation.NodeAdjacency;
 import edu.uz.graphs.service.parser.AdjacencyListParser;
 import edu.uz.graphs.service.parser.AdjacencyMatrixParser;
+import edu.uz.graphs.service.parser.IncidenceMatrixParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,19 +13,22 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NodeAdjacencyFactory {
+public class GraphRepresentationFactory {
 
     private static final String NEW_LINE_DELIMITER = "\r\n";
     private static final int NODE_NAMES_INDEX = 0;
 
     private final AdjacencyListParser adjacencyListParser;
     private final AdjacencyMatrixParser adjacencyMatrixParser;
+    private final IncidenceMatrixParser incidenceMatrixParser;
 
-    public NodeAdjacencyFactory(
-        AdjacencyListParser adjacencyListParser,
-        AdjacencyMatrixParser adjacencyMatrixParser) {
+    public GraphRepresentationFactory(
+        final AdjacencyListParser adjacencyListParser,
+        final AdjacencyMatrixParser adjacencyMatrixParser,
+        final IncidenceMatrixParser incidenceMatrixParser) {
         this.adjacencyListParser = adjacencyListParser;
         this.adjacencyMatrixParser = adjacencyMatrixParser;
+        this.incidenceMatrixParser = incidenceMatrixParser;
     }
 
     public List<NodeAdjacency> createFromAdjacencyList(final String text) {
@@ -52,7 +57,18 @@ public class NodeAdjacencyFactory {
         return nodeAdjacencies;
     }
 
-    private List<String> prepareLines(String text) {
+
+    public Graph createGraphFromIncidenceMatrix(final String text) {
+        final List<String> lines = prepareLines(text);
+        final String namesLine = lines.get(NODE_NAMES_INDEX);
+        final List<String> namesList = Arrays.asList(namesLine.split(" "));
+        final List<String> incidenceList = lines.subList(1, lines.size());
+
+        return incidenceMatrixParser.parse(incidenceList, namesList);
+    }
+
+
+    private List<String> prepareLines(final String text) {
         if (Strings.isEmpty(text)) {
             return new ArrayList<>();
         }
