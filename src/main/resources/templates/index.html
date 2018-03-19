@@ -9,12 +9,8 @@
 
 <style>
     #cy {
-        /*width: 80%;*/
         height: 500px;
-        /*position: absolute;*/
-        /*top: 300px;*/
-        /*left: 200px;*/
-        border: 1px solid black;
+        border: 1px solid lightslategrey;
     }
 </style>
 
@@ -34,22 +30,61 @@
 
 
 <div class="container">
-    <form action="#" th:action="@{/}" th:object="${input}" method="post">
-        <div class="form-group">
-            <label for="input">Input:</label>
-            <textarea class="form-control" rows="5" th:field="*{text}" id="input"></textarea>
-            <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}" class="radio">
-                <label><input type="radio" th:field="*{type}" th:value="${inputType}" th:text="${inputType.name}"></label>
+    <div>
+        <form th:action="@{/graph}" th:object="${input}" method="post">
+            <div class="form-group">
+                <label for="input">Input:</label>
+                <textarea class="form-control" rows="5" th:field="*{text}" id="input"></textarea>
+                <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}"
+                     class="radio">
+                    <label><input type="radio" th:field="*{type}" th:value="${inputType}"
+                                  th:text="${inputType.name}"></label>
+                </div>
+                <p>
+                    <button type="submit" name="action" value="create" class="btn btn-primary">
+                        Create
+                    </button>
+                    <button type="submit" name="action" value="clear" class="btn btn-danger">Clear
+                    </button>
+                </p>
             </div>
-            <p><button type="submit" class="btn btn-primary">Create</button></p>
+        </form>
+    </div>
+
+    <div>
+        <div id="cy"></div>
+    </div>
+
+    <br>
+    <form th:action="@{/vertices}" th:object="${vertex}"
+          method="post">
+        <div>
+            <input th:field="*{name}" placeholder="Name"/>
+
+            <button type="submit" name="action" value="add" class="btn btn-primary">Add vertex
+            </button>
+            <button type="submit" name="action" value="remove" class="btn btn-danger">Remove
+                vertex
+            </button>
+        </div>
+    </form>
+
+    <br>
+    <form th:action="@{/edges}" th:object="${edge}" method="post">
+        <div>
+            <input th:field="*{source}" placeholder="Source"/>
+            <input th:field="*{target}" placeholder="Target"/>
+            <input th:field="*{weight}" placeholder="Weight"/>
+
+            <button type="submit" name="action" value="add" class="btn btn-primary">Add edge
+            </button>
+            <button type="submit" name="action" value="remove" class="btn btn-danger">Remove edge
+            </button>
         </div>
     </form>
 </div>
 
-<div class="container">
-    <div id="cy"></div>
-</div>
-
+<br>
 
 
 <script th:inline="javascript">
@@ -73,7 +108,9 @@
             data: {
                 id: edge.name,
                 source: edge.source,
-                target: edge.target
+                target: edge.target,
+                weight: edge.weight,
+                label: edge.weight
             }
         });
     }
@@ -84,12 +121,15 @@
             nodes: cyVertices,
             edges: cyEdges
         },
-        style: [{
-            selector: 'node',
-            style: {
-                label: 'data(id)'
-            }
-        }],
+        style: cytoscape.stylesheet()
+        .selector('node')
+        .css({
+            'content': 'data(id)'
+        })
+        .selector('edge')
+        .css({
+            'content': 'data(weight)'
+        }),
         layout: {
             name: 'circle'
         }

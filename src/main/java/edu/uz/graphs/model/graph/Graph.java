@@ -13,7 +13,33 @@ public class Graph {
     }
 
     public void addEdge(final String nodeName, final String adjacentNodeName) {
-        edges.add(new Edge(nodeName, adjacentNodeName));
+        addEdge(nodeName, adjacentNodeName, null);
+    }
+
+    public void addEdge(final String source, final String target, final Integer weight) {
+        final Edge edge = new Edge(source, target, weight);
+        if (edges.contains(edge)) {
+            edges.remove(edge);
+        }
+        removeDuplicatedEdge(source, target, edges);
+        edges.add(edge);
+    }
+
+    public void removeVertex(final String name) {
+        if (vertices.contains(name)) {
+            vertices.remove(name);
+        }
+    }
+
+    public void removeEdge(final String source, final String target) {
+        final Edge edge = new Edge(source, target);
+        if (edges.contains(edge)) {
+            edges.remove(edge);
+        }
+        final Edge inverted = edge.inverted();
+        if (edges.contains(inverted)) {
+            edges.remove(inverted);
+        }
     }
 
     public Set<String> getVertices() {
@@ -22,5 +48,13 @@ public class Graph {
 
     public Set<Edge> getEdges() {
         return edges;
+    }
+
+    private void removeDuplicatedEdge(final String source, final String target,
+        final Set<Edge> edges) {
+        final Edge invertedEdge = new Edge(target, source, null);
+        if (edges.contains(invertedEdge)) {
+            edges.remove(invertedEdge);
+        }
     }
 }

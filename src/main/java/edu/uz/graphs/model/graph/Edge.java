@@ -1,13 +1,25 @@
 package edu.uz.graphs.model.graph;
 
+import java.util.Objects;
+
 public class Edge {
 
     private final String source;
     private final String target;
+    private final Integer weight;
 
-    public Edge(String source, String target) {
+    Edge(final String source, final String target, final Integer weight) {
         this.source = source;
         this.target = target;
+        this.weight = weight;
+    }
+
+    Edge(final String source, final String target) {
+        this(source, target, null);
+    }
+
+    public Edge inverted() {
+        return new Edge(target, source);
     }
 
     public String getSource() {
@@ -18,7 +30,29 @@ public class Edge {
         return target;
     }
 
+    public Integer getWeight() {
+        return weight;
+    }
+
     public String getName() {
         return source + target;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Edge edge = (Edge) o;
+        return Objects.equals(source, edge.source) &&
+            Objects.equals(target, edge.target);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(source, target);
     }
 }
