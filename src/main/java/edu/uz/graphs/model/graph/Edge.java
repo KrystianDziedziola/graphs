@@ -14,6 +14,10 @@ public class Edge {
         this.weight = weight;
     }
 
+    Edge(final String source, final String target) {
+        this(source, target, null);
+    }
+
     public String getSource() {
         return source;
     }
@@ -31,13 +35,17 @@ public class Edge {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Edge edge = (Edge) o;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Edge edge = (Edge) o;
         return Objects.equals(source, edge.source) &&
-                Objects.equals(target, edge.target) &&
-                Objects.equals(weight, edge.weight);
+            Objects.equals(target, edge.target) &&
+            Objects.equals(weight, edge.weight);
     }
 
     @Override

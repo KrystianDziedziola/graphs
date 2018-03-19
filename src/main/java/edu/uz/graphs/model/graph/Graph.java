@@ -25,6 +25,19 @@ public class Graph {
         edges.add(edge);
     }
 
+    public void removeVertex(final String name) {
+        if (vertices.contains(name)) {
+            vertices.remove(name);
+        }
+    }
+
+    public void removeEdge(final String source, final String target) {
+        final Edge edge = new Edge(source, target);
+        if (edges.contains(edge)) {
+            edges.remove(edge);
+        }
+    }
+
     public Set<String> getVertices() {
         return vertices;
     }
@@ -33,7 +46,8 @@ public class Graph {
         return edges;
     }
 
-    private void removeDuplicatedEdge(final String source, final String target, final Set<Edge> edges) {
+    private void removeDuplicatedEdge(final String source, final String target,
+        final Set<Edge> edges) {
         final Edge invertedEdge = new Edge(target, source, null);
         if (edges.contains(invertedEdge)) {
             edges.remove(invertedEdge);
