@@ -7,6 +7,7 @@
     <script src="webjars/cytoscape/3.2.5/dist/cytoscape.js"></script>
 </head>
 
+<!--todo: do pliku-->
 <style>
     #cy {
         height: 500px;
@@ -15,40 +16,32 @@
 </style>
 
 <body>
-
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Graphs application</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Create graph</a></li>
-            <li><a href="#">Something else</a></li>
-        </ul>
-    </div>
-</nav>
-
+<div th:replace="fragments/navigation_bar :: navigation_bar"></div>
 
 <div class="container">
-    <div>
-        <form th:action="@{/graph}" th:object="${input}" method="post">
-            <div class="form-group">
-                <label for="input">Input:</label>
-                <textarea class="form-control" rows="5" th:field="*{text}" id="input"></textarea>
-                <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}"
-                     class="radio">
-                    <label><input type="radio" th:field="*{type}" th:value="${inputType}"
-                                  th:text="${inputType.name}"></label>
+    <div class="panel panel-default">
+        <div class="panel-heading">Create graph</div>
+        <div class="panel-body">
+            <form th:action="@{/graph}" th:object="${input}" method="post">
+                <div class="form-group">
+                    <textarea class="form-control" rows="5" th:field="*{text}"
+                              id="input"></textarea>
+                    <div th:each="inputType : ${T(edu.uz.graphs.model.input.InputType).values()}"
+                         class="radio">
+                        <label><input type="radio" th:field="*{type}" th:value="${inputType}"
+                                      th:text="${inputType.name}"></label>
+                    </div>
+                    <div>
+                        <button type="submit" name="action" value="create" class="btn btn-primary">
+                            Create
+                        </button>
+                        <button type="submit" name="action" value="clear" class="btn btn-danger">
+                            Clear
+                        </button>
+                    </div>
                 </div>
-                <p>
-                    <button type="submit" name="action" value="create" class="btn btn-primary">
-                        Create
-                    </button>
-                    <button type="submit" name="action" value="clear" class="btn btn-danger">Clear
-                    </button>
-                </p>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <div>
@@ -56,32 +49,65 @@
     </div>
 
     <br>
-    <form th:action="@{/vertices}" th:object="${vertex}"
-          method="post">
-        <div>
-            <input th:field="*{name}" placeholder="Name"/>
+    <div class="panel panel-default">
+        <div class="panel-heading">Modify graph</div>
+        <div class="panel-body">
+            <form th:action="@{/vertices}" th:object="${vertex}"
+                  method="post">
+                <div>
+                    <input th:field="*{name}" placeholder="Name"/>
 
-            <button type="submit" name="action" value="add" class="btn btn-primary">Add vertex
-            </button>
-            <button type="submit" name="action" value="remove" class="btn btn-danger">Remove
-                vertex
-            </button>
+                    <button type="submit" name="action" value="add" class="btn btn-primary">Add
+                        vertex
+                    </button>
+                    <button type="submit" name="action" value="remove" class="btn btn-danger">
+                        Remove
+                        vertex
+                    </button>
+                </div>
+            </form>
+            <br>
+            <form th:action="@{/edges}" th:object="${edge}" method="post">
+                <div>
+                    <input th:field="*{source}" placeholder="Source"/>
+                    <input th:field="*{target}" placeholder="Target"/>
+                    <input th:field="*{weight}" placeholder="Weight"/>
+
+                    <button type="submit" name="action" value="add" class="btn btn-primary">Add
+                        edge
+                    </button>
+                    <button type="submit" name="action" value="remove" class="btn btn-danger">
+                        Remove
+                        edge
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+
 
     <br>
-    <form th:action="@{/edges}" th:object="${edge}" method="post">
-        <div>
-            <input th:field="*{source}" placeholder="Source"/>
-            <input th:field="*{target}" placeholder="Target"/>
-            <input th:field="*{weight}" placeholder="Weight"/>
 
-            <button type="submit" name="action" value="add" class="btn btn-primary">Add edge
-            </button>
-            <button type="submit" name="action" value="remove" class="btn btn-danger">Remove edge
-            </button>
+    <div class="panel panel-default">
+        <div class="panel-heading">Cycles</div>
+        <div class="panel-body">
+            <textarea readonly class="form-control" rows="5" placeholder="Cycle result"
+                      th:text="${cycleResult}"></textarea>
+            <br>
+            <form th:action="@{/cycles}" method="post">
+                <div>
+                    <button type="submit" name="action" value="euler" class="btn btn-success">
+                        Eulerian cycle
+                    </button>
+                    <button type="submit" name="action" value="hamilton"
+                            class="btn btn-success">
+                        Hamiltonian cycle
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+
 </div>
 
 <br>
