@@ -87,27 +87,6 @@
 
 
     <br>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">Cycles</div>
-        <div class="panel-body">
-            <textarea readonly class="form-control" rows="5" placeholder="Cycle result"
-                      th:text="${cycleResult}"></textarea>
-            <br>
-            <form th:action="@{/cycles}" method="post">
-                <div>
-                    <button type="submit" name="action" value="euler" class="btn btn-success">
-                        Eulerian cycle
-                    </button>
-                    <button type="submit" name="action" value="hamilton"
-                            class="btn btn-success">
-                        Hamiltonian cycle
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
 </div>
 
 <br>

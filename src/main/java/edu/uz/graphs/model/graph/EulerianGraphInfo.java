@@ -5,9 +5,9 @@ import java.util.List;
 public class EulerianGraphInfo {
 
     private final EulerianType type;
-    private final List<String> cycle;
+    private final List<Edge> cycle;
 
-    public EulerianGraphInfo(final EulerianType type, final List<String> cycle) {
+    public EulerianGraphInfo(final EulerianType type, final List<Edge> cycle) {
         this.type = type;
         this.cycle = cycle;
     }
@@ -16,7 +16,7 @@ public class EulerianGraphInfo {
         return type;
     }
 
-    public List<String> getCycle() {
+    public List<Edge> getCycle() {
         return cycle;
     }
 }

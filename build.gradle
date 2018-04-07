@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.0.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -20,20 +20,22 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 
 dependencies {
 //	spring
-	compile('org.springframework.boot:spring-boot-starter')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.0.0.RELEASE'
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.0.0.RELEASE'
 
 //	webjars
-	compile group: 'org.webjars.bower', name: 'cytoscape', version: '3.2.5'
-	compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7'
+    compile group: 'org.webjars.bower', name: 'cytoscape', version: '3.2.5'
+    compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7'
 
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
