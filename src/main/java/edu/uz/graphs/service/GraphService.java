@@ -3,6 +3,7 @@ package edu.uz.graphs.service;
 import edu.uz.graphs.model.graph.Graph;
 import edu.uz.graphs.model.input.InputType;
 import edu.uz.graphs.model.representation.NodeAdjacency;
+import edu.uz.graphs.repository.GraphRepository;
 import edu.uz.graphs.service.factory.GraphRepresentationFactory;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,12 @@ import org.springframework.stereotype.Service;
 public class GraphService {
 
     private final GraphRepresentationFactory graphRepresentationFactory;
+    private final GraphRepository graphRepository;
 
-    public GraphService(final GraphRepresentationFactory graphRepresentationFactory) {
+    public GraphService(final GraphRepresentationFactory graphRepresentationFactory,
+        final GraphRepository graphRepository) {
         this.graphRepresentationFactory = graphRepresentationFactory;
+        this.graphRepository = graphRepository;
     }
 
     public Graph create(final String text, final InputType type) {

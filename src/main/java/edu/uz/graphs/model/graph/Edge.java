@@ -1,21 +1,26 @@
 package edu.uz.graphs.model.graph;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Edge {
+public class Edge implements Serializable {
 
     private final String source;
     private final String target;
     private final Integer weight;
 
-    Edge(final String source, final String target, final Integer weight) {
+    public Edge(final String source, final String target, final Integer weight) {
         this.source = source;
         this.target = target;
         this.weight = weight;
     }
 
-    Edge(final String source, final String target) {
+    public Edge(final String source, final String target) {
         this(source, target, null);
+    }
+
+    public boolean contains(final String vertex) {
+        return target.equals(vertex) || source.equals(vertex);
     }
 
     public Edge inverted() {
@@ -38,6 +43,17 @@ public class Edge {
         return source + target;
     }
 
+    public String getOther(final String vertex) {
+        if (target.equals(vertex)) {
+            return source;
+        }
+        if (source.equals(vertex)) {
+            return target;
+        }
+
+        throw new IllegalArgumentException("No vertex " + vertex + " in edge " + this);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -54,5 +70,10 @@ public class Edge {
     @Override
     public int hashCode() {
         return Objects.hash(source, target);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%s, %s)", source, target);
     }
 }

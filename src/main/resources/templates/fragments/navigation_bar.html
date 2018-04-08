@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="navigation_bar">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Graphs application</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}"><a
+                    href="/">Create graph</a></li>
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/cycles' ? 'active':''}">
+                    <a href="/cycles">Cycles</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>
