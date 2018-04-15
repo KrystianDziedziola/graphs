@@ -64,6 +64,9 @@ public class Graph implements Serializable {
         removeEdge(edge.getSource(), edge.getTarget());
     }
 
+    /**
+     * Na podstawie twierdzenia Eulera
+     */
     public EulerianType eulerianType() {
         final Integer numberOfOddDegreeVertexes = getOddDegreeVertices().size();
 
@@ -75,6 +78,28 @@ public class Graph implements Serializable {
             default:
                 return EulerianType.NON_EULERIAN;
         }
+    }
+
+    /**
+     * Na podstawie twierdzenia Dirca
+     */
+//    Chyba na podstawie tego twierdzenia nie można tego stwierdzić
+    @Deprecated
+    public HamiltonianType hamiltonianType() {
+        final int verticesCount = vertices.size();
+
+        if (verticesCount < 3) {
+            return HamiltonianType.HAMILTONIAN;
+        }
+
+        for (final String vertex : vertices) {
+            final Integer degree = countVertexDegree(vertex);
+            if (degree < verticesCount / 2) {
+                return HamiltonianType.NON_HAMILTONIAN;
+            }
+        }
+
+        return HamiltonianType.HAMILTONIAN;
     }
 
     public List<String> getOddDegreeVertices() {
@@ -127,6 +152,24 @@ public class Graph implements Serializable {
         return reachableVertices(vertex, numberOfReachableVertices, visitedVertices);
     }
 
+    public Integer countVertexDegree(final String vertex) {
+        final AtomicInteger degree = new AtomicInteger();
+        edges.forEach(edge -> {
+            if (isConnected(vertex, edge)) {
+                degree.incrementAndGet();
+            }
+        });
+        return degree.intValue();
+    }
+
+    public Set<String> getVertices() {
+        return vertices;
+    }
+
+    public Set<Edge> getEdges() {
+        return edges;
+    }
+
     private int reachableVertices(final String vertex, int numberOfReachableVertices,
         final List<String> visitedVertices) {
 
@@ -139,24 +182,6 @@ public class Graph implements Serializable {
             }
         }
         return numberOfReachableVertices;
-    }
-
-    public Set<String> getVertices() {
-        return vertices;
-    }
-
-    public Set<Edge> getEdges() {
-        return edges;
-    }
-
-    private Integer countVertexDegree(final String vertex) {
-        final AtomicInteger degree = new AtomicInteger();
-        edges.forEach(edge -> {
-            if (isConnected(vertex, edge)) {
-                degree.incrementAndGet();
-            }
-        });
-        return degree.intValue();
     }
 
     private boolean isOdd(final Integer degree) {
@@ -173,5 +198,16 @@ public class Graph implements Serializable {
 
     private boolean isConnected(final String vertex, final Edge edge) {
         return vertex.equals(edge.getSource()) || vertex.equals(edge.getTarget());
+    }
+
+    public boolean edgeExists(final String source, final String target) {
+        final Edge edge = new Edge(source, target);
+        return edges.contains(edge) || edges.contains(edge.inverted());
+    }
+
+    public Set<String> getNonIsolatedVertices() {
+        return vertices.stream()
+            .filter(vertex -> !countVertexDegree(vertex).equals(0))
+            .collect(Collectors.toSet());
     }
 }

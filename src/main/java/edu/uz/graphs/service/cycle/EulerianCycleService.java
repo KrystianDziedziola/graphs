@@ -1,9 +1,9 @@
-package edu.uz.graphs.service;
+package edu.uz.graphs.service.cycle;
 
 import edu.uz.graphs.model.graph.Edge;
-import edu.uz.graphs.model.graph.EulerianGraphInfo;
 import edu.uz.graphs.model.graph.EulerianType;
 import edu.uz.graphs.model.graph.Graph;
+import edu.uz.graphs.model.graph.GraphCycleInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,10 +11,13 @@ import java.util.Optional;
 import java.util.Random;
 import org.springframework.stereotype.Service;
 
+/**
+ * Uses Fleury's algorithm: https://www.geeksforgeeks.org/fleurys-algorithm-for-printing-eulerian-path/
+ */
 @Service
 public class EulerianCycleService {
 
-    public EulerianGraphInfo eulerianCycle(final Graph graph) {
+    GraphCycleInfo cycle(final Graph graph) {
         final Graph graphCopy = Graph.copyOf(graph);
 
         final EulerianType graphType = graphCopy.eulerianType();
@@ -22,13 +25,13 @@ public class EulerianCycleService {
 
         final List<Edge> cycle = new ArrayList<>();
         if (!startVertexOptional.isPresent()) {
-            return new EulerianGraphInfo(graphType, cycle);
+            return new GraphCycleInfo(graphType, cycle);
         }
 
         final String startVertex = startVertexOptional.get();
         cycle(startVertex, graphCopy, cycle);
 
-        return new EulerianGraphInfo(graphType, cycle);
+        return new GraphCycleInfo(graphType, cycle);
     }
 
     private void cycle(final String startVertex, final Graph graph, final List<Edge> cycle) {

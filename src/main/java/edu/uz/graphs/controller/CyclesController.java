@@ -1,9 +1,9 @@
 package edu.uz.graphs.controller;
 
-import edu.uz.graphs.model.graph.EulerianGraphInfo;
 import edu.uz.graphs.model.graph.Graph;
+import edu.uz.graphs.model.graph.GraphCycleInfo;
 import edu.uz.graphs.repository.GraphRepository;
-import edu.uz.graphs.service.EulerianCycleService;
+import edu.uz.graphs.service.cycle.CyclesService;
 import edu.uz.graphs.view.ViewContentFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CyclesController {
 
-    private final EulerianCycleService eulerianCycleService;
+    private final CyclesService cyclesService;
     private final GraphRepository graphRepository;
     private final ViewContentFactory viewContentFactory;
 
-    public CyclesController(final EulerianCycleService eulerianCycleService,
+    public CyclesController(final CyclesService cyclesService,
         final GraphRepository graphRepository,
         final ViewContentFactory viewContentFactory) {
-        this.eulerianCycleService = eulerianCycleService;
+        this.cyclesService = cyclesService;
         this.graphRepository = graphRepository;
         this.viewContentFactory = viewContentFactory;
     }
@@ -39,8 +39,8 @@ public class CyclesController {
         model.addAttribute("vertices", graph.getVertices());
         model.addAttribute("edges", graph.getEdges());
 
-        final EulerianGraphInfo graphInfo = eulerianCycleService.eulerianCycle(graph);
-        model.addAttribute("cycleResult", viewContentFactory.createEulerianCycleResult(graphInfo));
+        final GraphCycleInfo graphInfo = cyclesService.eulerianCycle(graph);
+        model.addAttribute("cycleResult", viewContentFactory.createCycleResult(graphInfo));
         return "cycles";
     }
 
@@ -49,6 +49,10 @@ public class CyclesController {
         final Graph graph = graphRepository.getGraph();
         model.addAttribute("vertices", graph.getVertices());
         model.addAttribute("edges", graph.getEdges());
+
+        final GraphCycleInfo graphInfo = cyclesService.hamiltonianCycle(graph);
+        model.addAttribute("cycleResult", viewContentFactory.createCycleResult(graphInfo));
+
         return "cycles";
     }
 }
