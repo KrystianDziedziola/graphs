@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Graphs application</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <script src="webjars/cytoscape/3.2.5/dist/cytoscape.js"></script>
+</head>
+
+<!--todo: do pliku-->
+<style>
+    #cy {
+        height: 500px;
+        border: 1px solid lightslategrey;
+    }
+</style>
+
+<body>
+<div th:replace="fragments/navigation_bar :: navigation_bar"></div>
+
+<div class="container">
+    <div>
+        <div id="cy"></div>
+    </div>
+
+    <br>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Search</div>
+        <div class="panel-body">
+            <textarea readonly class="form-control" rows="5" placeholder="Search result"
+                      th:text="${searchResult}"></textarea>
+            <br>
+            <form th:action="@{/search}" th:object="${searchParameters}" method="post">
+                <div>
+                    <input th:field="*{root}" placeholder="Root"/>
+                    <button type="submit" name="action" value="deepFirstSearch"
+                            class="btn btn-success">
+                        Deep first search
+                    </button>
+                </div>
+                <br>
+                <div>
+                    <button type="submit" name="action" value="criticalEdgeSearch"
+                            class="btn btn-success">
+                        Critical edge search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var vertices = /*[[${vertices}]]*/ '';
+    var cyVertices = [];
+    for (var vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
+        var vertex = vertices[vertexIndex];
+        cyVertices.push({
+            data: {
+                id: vertex,
+                label: vertex
+            }
+        });
+    }
+
+    var edges = /*[[${edges}]]*/ '';
+    var cyEdges = [];
+    for (var edgesIndex = 0; edgesIndex < edges.length; edgesIndex++) {
+        var edge = edges[edgesIndex];
+        cyEdges.push({
+            data: {
+                id: edge.name,
+                source: edge.source,
+                target: edge.target,
+                weight: edge.weight,
+                label: edge.weight
+            }
+        });
+    }
+
+    var cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: {
+            nodes: cyVertices,
+            edges: cyEdges
+        },
+        style: cytoscape.stylesheet()
+        .selector('node')
+        .css({
+            'content': 'data(id)'
+        })
+        .selector('edge')
+        .css({
+            'content': 'data(weight)'
+        }),
+        layout: {
+            name: 'circle'
+        }
+    });
+</script>
+
+</body>
+</html>
