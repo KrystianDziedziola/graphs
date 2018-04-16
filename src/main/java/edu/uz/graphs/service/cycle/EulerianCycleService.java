@@ -77,21 +77,11 @@ public class EulerianCycleService {
             return true;
         }
 
-        if (isBridge(startVertex, edge, graph)) {
+        if (graph.isBridge(startVertex, edge)) {
             return false;
         }
 
         return true;
-    }
-
-    private boolean isBridge(final String vertex, final Edge edge, final Graph graph) {
-        final Graph graphCopy = Graph.copyOf(graph);
-
-        final Integer reachableVerticesCount = graphCopy.countReachableVertices(vertex);
-        graphCopy.removeEdge(edge);
-        final Integer reachableVerticesCountWithoutEdge = graphCopy.countReachableVertices(vertex);
-
-        return reachableVerticesCount > reachableVerticesCountWithoutEdge;
     }
 
     private boolean isOnlyOne(final List<Edge> adjacentEdges) {

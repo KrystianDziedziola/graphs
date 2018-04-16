@@ -80,28 +80,6 @@ public class Graph implements Serializable {
         }
     }
 
-    /**
-     * Na podstawie twierdzenia Dirca
-     */
-//    Chyba na podstawie tego twierdzenia nie można tego stwierdzić
-    @Deprecated
-    public HamiltonianType hamiltonianType() {
-        final int verticesCount = vertices.size();
-
-        if (verticesCount < 3) {
-            return HamiltonianType.HAMILTONIAN;
-        }
-
-        for (final String vertex : vertices) {
-            final Integer degree = countVertexDegree(vertex);
-            if (degree < verticesCount / 2) {
-                return HamiltonianType.NON_HAMILTONIAN;
-            }
-        }
-
-        return HamiltonianType.HAMILTONIAN;
-    }
-
     public List<String> getOddDegreeVertices() {
         final List<String> oddDegreeVertices = new ArrayList<>();
         vertices.forEach(vertex -> {
@@ -147,9 +125,8 @@ public class Graph implements Serializable {
     }
 
     public Integer countReachableVertices(final String vertex) {
-        final int numberOfReachableVertices = 1;
         final List<String> visitedVertices = new ArrayList<>();
-        return reachableVertices(vertex, numberOfReachableVertices, visitedVertices);
+        return reachableVertices(vertex, visitedVertices);
     }
 
     public Integer countVertexDegree(final String vertex) {
@@ -162,6 +139,48 @@ public class Graph implements Serializable {
         return degree.intValue();
     }
 
+    public boolean edgeExists(final String source, final String target) {
+        final Edge edge = new Edge(source, target);
+        return edges.contains(edge) || edges.contains(edge.inverted());
+    }
+
+    public Set<String> getNonIsolatedVertices() {
+        return vertices.stream()
+            .filter(vertex -> !countVertexDegree(vertex).equals(0))
+            .collect(Collectors.toSet());
+    }
+
+    public boolean isBridge(final Edge edge) {
+        return isBridge(edge.getSource(), edge);
+    }
+
+    public boolean isBridge(final String vertex, final Edge edge) {
+        final Graph graphCopy = Graph.copyOf(this);
+
+        final Integer reachableVerticesCount = graphCopy.countReachableVertices(vertex);
+        graphCopy.removeEdge(edge);
+        final Integer reachableVerticesCountWithoutEdge = graphCopy.countReachableVertices(vertex);
+
+        return reachableVerticesCount > reachableVerticesCountWithoutEdge;
+    }
+
+    public List<String> deepFirstTraverse(final String vertex) {
+        final List<String> visitedVertices = new ArrayList<>();
+        dfs(vertex, visitedVertices);
+        return visitedVertices;
+    }
+
+    private void dfs(final String vertex, final List<String> visitedVertices) {
+        visitedVertices.add(vertex);
+
+        final List<String> adjacentVertices = getAdjacentVertices(vertex);
+        for (final String adjacentVertex : adjacentVertices) {
+            if (!visitedVertices.contains(adjacentVertex)) {
+                dfs(adjacentVertex, visitedVertices);
+            }
+        }
+    }
+
     public Set<String> getVertices() {
         return vertices;
     }
@@ -170,15 +189,14 @@ public class Graph implements Serializable {
         return edges;
     }
 
-    private int reachableVertices(final String vertex, int numberOfReachableVertices,
-        final List<String> visitedVertices) {
+    private int reachableVertices(final String vertex, final List<String> visitedVertices) {
+        int numberOfReachableVertices = 1;
 
         visitedVertices.add(vertex);
 
         for (final String adjacentVertex : getAdjacentVertices(vertex)) {
             if (!visitedVertices.contains(adjacentVertex)) {
-                numberOfReachableVertices += reachableVertices(adjacentVertex,
-                    numberOfReachableVertices, visitedVertices);
+                numberOfReachableVertices += reachableVertices(adjacentVertex, visitedVertices);
             }
         }
         return numberOfReachableVertices;
@@ -198,16 +216,5 @@ public class Graph implements Serializable {
 
     private boolean isConnected(final String vertex, final Edge edge) {
         return vertex.equals(edge.getSource()) || vertex.equals(edge.getTarget());
-    }
-
-    public boolean edgeExists(final String source, final String target) {
-        final Edge edge = new Edge(source, target);
-        return edges.contains(edge) || edges.contains(edge.inverted());
-    }
-
-    public Set<String> getNonIsolatedVertices() {
-        return vertices.stream()
-            .filter(vertex -> !countVertexDegree(vertex).equals(0))
-            .collect(Collectors.toSet());
     }
 }

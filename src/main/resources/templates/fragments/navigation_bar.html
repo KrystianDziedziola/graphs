@@ -17,6 +17,8 @@
                     href="/">Create graph</a></li>
                 <li th:classappend="${#httpServletRequest.getRequestURI() == '/cycles' ? 'active':''}">
                     <a href="/cycles">Cycles</a></li>
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/search' ? 'active':''}">
+                    <a href="/search">Search</a></li>
             </ul>
         </div>
     </nav>
