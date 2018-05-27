@@ -12,11 +12,11 @@ import org.apache.commons.lang3.SerializationUtils;
 
 public class Graph implements Serializable {
 
-    private final Set<String> vertices;
+    private final List<String> vertices;
     private final Set<Edge> edges;
 
     public Graph() {
-        vertices = new HashSet<>();
+        vertices = new ArrayList<>();
         edges = new HashSet<>();
     }
 
@@ -181,7 +181,7 @@ public class Graph implements Serializable {
         }
     }
 
-    public Set<String> getVertices() {
+    public List<String> getVertices() {
         return vertices;
     }
 
