@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import edu.uz.graphs.model.PathResult;
 import org.apache.commons.lang3.SerializationUtils;
 
 public class Graph implements Serializable {
@@ -216,5 +218,11 @@ public class Graph implements Serializable {
 
     private boolean isConnected(final String vertex, final Edge edge) {
         return vertex.equals(edge.getSource()) || vertex.equals(edge.getTarget());
+    }
+
+    public PathResult findShortestPath(final String rootNode, final String destinationNode) {
+//        todo:
+
+        return new PathResult(destinationNode, 0, new ArrayList<>());
     }
 }

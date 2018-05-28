@@ -21,6 +21,8 @@
                     <a href="/search">Search</a></li>
                 <li th:classappend="${#httpServletRequest.getRequestURI() == '/coloring' ? 'active':''}">
                     <a href="/coloring">Coloring</a></li>
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/path' ? 'active':''}">
+                    <a href="/path">Shortest path</a></li>
             </ul>
         </div>
     </nav>

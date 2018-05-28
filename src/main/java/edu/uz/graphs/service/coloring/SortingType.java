@@ -2,7 +2,7 @@ package edu.uz.graphs.service.coloring;
 
 public enum SortingType {
 
-    LIST_POSITION("Position on adjacency list"),
+    ALPHABETICALLY("Alphabetically"),
     DEGREE_DESCENDING("Descending by vertex degree"),
     RANDOM("Random");
 
