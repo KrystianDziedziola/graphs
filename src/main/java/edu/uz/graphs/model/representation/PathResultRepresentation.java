@@ -1,6 +1,6 @@
 package edu.uz.graphs.model.representation;
 
-import edu.uz.graphs.model.PathResult;
+import edu.uz.graphs.model.path.PathResult;
 import java.util.List;
 
 public class PathResultRepresentation {

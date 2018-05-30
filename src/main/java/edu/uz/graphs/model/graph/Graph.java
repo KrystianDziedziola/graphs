@@ -7,9 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import edu.uz.graphs.model.PathResult;
 import org.apache.commons.lang3.SerializationUtils;
 
 public class Graph implements Serializable {
@@ -20,6 +19,11 @@ public class Graph implements Serializable {
     public Graph() {
         vertices = new ArrayList<>();
         edges = new HashSet<>();
+    }
+
+    public Graph(final List<String> vertices, final Set<Edge> edges) {
+        this.vertices = vertices;
+        this.edges = edges;
     }
 
     public static Graph copyOf(final Graph graph) {
@@ -191,6 +195,23 @@ public class Graph implements Serializable {
         return edges;
     }
 
+    public Integer getWeight(final String from, final String to) {
+        final Edge edge = getEdge(from, to);
+        return edge.getWeight();
+    }
+
+    private Edge getEdge(final String from, final String to) {
+        return edges
+            .stream()
+            .filter(edge -> edge.equals(new Edge(from, to)) || edge.equals(new Edge(to, from)))
+            .findFirst()
+            .orElseThrow(edgeNotFound(from, to));
+    }
+
+    private Supplier<IllegalArgumentException> edgeNotFound(final String from, final String to) {
+        return () -> new IllegalArgumentException(String.format("Edge %s-%s not found", from, to));
+    }
+
     private int reachableVertices(final String vertex, final List<String> visitedVertices) {
         int numberOfReachableVertices = 1;
 
@@ -218,11 +239,5 @@ public class Graph implements Serializable {
 
     private boolean isConnected(final String vertex, final Edge edge) {
         return vertex.equals(edge.getSource()) || vertex.equals(edge.getTarget());
-    }
-
-    public PathResult findShortestPath(final String rootNode, final String destinationNode) {
-//        todo:
-
-        return new PathResult(destinationNode, 0, new ArrayList<>());
     }
 }

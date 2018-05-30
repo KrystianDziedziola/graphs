@@ -1,14 +1,14 @@
-package edu.uz.graphs.model;
+package edu.uz.graphs.model.path;
 
 import java.util.List;
 
 public class PathResult {
 
-    private String destinationNode;
     private final int length;
     private final List<String> path;
+    private final String destinationNode;
 
-    public PathResult(String destinationNode, int length, List<String> path) {
+    public PathResult(final String destinationNode, final int length, final List<String> path) {
         this.destinationNode = destinationNode;
         this.length = length;
         this.path = path;
