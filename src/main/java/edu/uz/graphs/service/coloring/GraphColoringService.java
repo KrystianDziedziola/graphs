@@ -70,8 +70,7 @@ public class GraphColoringService {
             case RANDOM:
                 Collections.shuffle(vertices);
                 return vertices;
-            case LIST_POSITION:
-//                FIXME: jest alfabetycznie
+            case ALPHABETICALLY:
                 return vertices
                     .stream()
                     .sorted(Comparator.naturalOrder())

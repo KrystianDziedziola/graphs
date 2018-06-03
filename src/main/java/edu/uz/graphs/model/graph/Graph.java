@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -18,6 +19,11 @@ public class Graph implements Serializable {
     public Graph() {
         vertices = new ArrayList<>();
         edges = new HashSet<>();
+    }
+
+    public Graph(final List<String> vertices, final Set<Edge> edges) {
+        this.vertices = vertices;
+        this.edges = edges;
     }
 
     public static Graph copyOf(final Graph graph) {
@@ -187,6 +193,23 @@ public class Graph implements Serializable {
 
     public Set<Edge> getEdges() {
         return edges;
+    }
+
+    public Integer getWeight(final String from, final String to) {
+        final Edge edge = getEdge(from, to);
+        return edge.getWeight();
+    }
+
+    private Edge getEdge(final String from, final String to) {
+        return edges
+            .stream()
+            .filter(edge -> edge.equals(new Edge(from, to)) || edge.equals(new Edge(to, from)))
+            .findFirst()
+            .orElseThrow(edgeNotFound(from, to));
+    }
+
+    private Supplier<IllegalArgumentException> edgeNotFound(final String from, final String to) {
+        return () -> new IllegalArgumentException(String.format("Edge %s-%s not found", from, to));
     }
 
     private int reachableVertices(final String vertex, final List<String> visitedVertices) {
